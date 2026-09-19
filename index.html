@@ -16,17 +16,15 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="appSidebar">
             <div class="sidebar-brand">
+                <div class="brand-logo-container">
+                    <!-- تم إضافة اللوجو هنا، وتأكد من امتداد الصورة سواء كان .png أو .jpg -->
+                    <img src="logo.Jpg" alt="Pharma Overseas Logo" class="brand-logo">
+                </div>
                  <div class="brand-text-area">
                     <h2>PHARMA OVERSEAS</h2>
                     <span>IT Service Desk</span>
                 </div>
                 <button id="mobileCloseBtn" class="mobile-close-btn" onclick="toggleMobileMenu()">&times;</button>
-            </div>
-
-            <!-- Live Time & Timezone Widget (Requested Style) -->
-            <div class="sidebar-time-widget">
-                <span id="liveClockTime">11:25</span> 
-                <span class="timezone-bracket">[ <span id="liveTimeZone">GMT +2</span> ]</span>
             </div>
 
             <nav class="sidebar-menu">
@@ -50,7 +48,10 @@
         <div class="main-wrapper">
             <!-- Top Mobile Bar -->
             <header class="mobile-top-bar">
-                <div class="mobile-brand-title">IT Service Desk</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain;">
+                    <div class="mobile-brand-title">IT Service Desk</div>
+                </div>
                 <button id="mobileMenuBtn" class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             </header>
 
@@ -168,7 +169,7 @@
 
             <footer class="site-footer">
                 <div class="footer-content">
-                    <p>Designed & Developed by <span class="developer-name">Mohamed Aboud </span></p>
+                    <p>Designed & Developed by <span class="developer-name">Mohamed Aboud</span></p>
                     <span class="footer-company">Pharma Overseas © 2026</span>
                 </div>
             </footer>
