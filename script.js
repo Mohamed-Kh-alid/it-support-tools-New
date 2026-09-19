@@ -52,6 +52,16 @@ function switchTab(tabId, element) {
     element.classList.add('active');
     activeTabName = tabId;
 
+    // مسح خانة البحث عند الانتقال بين التبابيب لضمان تجربة مستخدم أفضل
+    const searchInput = document.getElementById('globalSearch');
+    if (searchInput) {
+        searchInput.value = '';
+        // إعادة عرض البيانات الأصلية للتبويب الجديد
+        if (tabId === 'workDistribution') renderWorkDistributionTable(cachedWorkData);
+        if (tabId === 'nightShift') renderNightShiftTable(cachedNightData);
+        if (tabId === 'annualVacations') renderVacationsTable(cachedVacationsData);
+    }
+
     const titles = {
         workDistribution: { title: "Work Distribution", subtitle: "Infrastructure Support & Group Branch Assignments" },
         nightShift: { title: "Night Shift Schedule", subtitle: "Weekly Rotation & Coverage Tracker" },
@@ -96,8 +106,11 @@ function renderWorkDistributionTable(data) {
         tbody.appendChild(tr);
     });
 
-    document.getElementById('metricBranchesCount').innerText = `${totalBranchesSum} Branches`;
-    document.getElementById('metricGroupsCount').innerText = `${data.length} Groups (G1 to G${data.length})`;
+    // تحديث العدّادات في أعلى الصفحة فقط لو دي البيانات الأصلية الكاملة
+    if (data === cachedWorkData) {
+        document.getElementById('metricBranchesCount').innerText = `${totalBranchesSum} Branches`;
+        document.getElementById('metricGroupsCount').innerText = `${data.length} Groups (G1 to G${data.length})`;
+    }
 }
 
 function renderNightShiftTable(data) {
@@ -105,7 +118,7 @@ function renderNightShiftTable(data) {
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    if (data.length > 0) {
+    if (data.length > 0 && data === cachedNightData) {
         document.getElementById('metricNightShift').innerText = data[0]['Engineer Name'] || data[0]['Infrastructure Support'] || 'N/A';
     }
 
@@ -182,6 +195,7 @@ function filterModalBranches() {
     renderModalBranchTags(filtered);
 }
 
+// نظام بحث ذكي وشامل يعمل بكفاءة داخل التبويب النشط حالياً
 function filterTableData() {
     const query = document.getElementById('globalSearch').value.toLowerCase();
     
@@ -190,7 +204,7 @@ function filterTableData() {
             const text = `${row['Group Name'] || ''} ${row['Engineers'] || ''} ${row['Assigned Branches'] || ''}`.toLowerCase();
             return text.includes(query);
         });
-        renderFilteredWorkTable(filtered);
+        renderWorkDistributionTable(filtered);
     } 
     else if (activeTabName === 'nightShift') {
         const filtered = cachedNightData.filter(row => {
@@ -213,35 +227,4 @@ function filterTableData() {
         });
         renderVacationsTable(filtered);
     }
-}
-
-function renderFilteredWorkTable(data) {
-    const tbody = document.getElementById('workDistributionTableBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    data.forEach((row, index) => {
-        const groupName = row['Group Name'] || row['Group_Name'] || `G${index + 1}`;
-        const engineers = row['Engineers'] || '';
-        const branches = row['Assigned Branches'] || row['Assigned_Branches'] || '';
-        const totalBranches = row['Total Branches'] || row['Total_Branches'] || branches.split(',').length;
-
-        const branchListArray = branches.split(',').map(b => b.trim()).filter(b => b.length > 0);
-        let displayBranchesText = branchListArray.slice(0, 4).join(', ');
-        if (branchListArray.length > 4) {
-            displayBranchesText += `, ... and ${branchListArray.length - 4} more (Click to view all)`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = 'clickable-row';
-        tr.onclick = () => openBranchModal(groupName, engineers, branchListArray);
-
-        tr.innerHTML = `
-            <td><span class="group-badge">${groupName}</span></td>
-            <td><strong>${engineers}</strong></td>
-            <td style="color: var(--text-secondary);">${displayBranchesText}</td>
-            <td style="text-align: right; font-weight: 700; color: #FFFFFF;">${totalBranches}</td>
-        `;
-        tbody.appendChild(tr);
-    });
 }
