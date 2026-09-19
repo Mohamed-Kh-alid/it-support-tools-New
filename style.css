@@ -49,38 +49,41 @@ html, body {
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
 }
 
-.sidebar-brand h2 { font-size: 0.9rem; font-weight: 700; color: #FFFFFF; }
-.sidebar-brand span { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; display: block; }
-
-/* Live Time Widget Style */
-.sidebar-time-widget {
-    margin: 15px 20px;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #FFFFFF;
+.brand-logo-container {
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    flex-shrink: 0;
 }
-.timezone-bracket {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 400;
+
+.brand-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
+
+.brand-text-area {
+    flex-grow: 1;
+}
+
+.sidebar-brand h2 { font-size: 0.85rem; font-weight: 700; color: #FFFFFF; letter-spacing: 0.3px; }
+.sidebar-brand span { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; display: block; }
 
 .mobile-close-btn {
     display: none; background: transparent; border: none;
     color: var(--text-primary); font-size: 1.6rem; cursor: pointer;
 }
 
-.sidebar-menu { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+.sidebar-menu { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; margin-top: 10px; }
 
 .menu-item {
     display: flex; align-items: center; gap: 12px; width: 100%;
@@ -109,7 +112,7 @@ html, body {
     top: 0;
     z-index: 999;
 }
-.mobile-brand-title { font-weight: 700; color: #fff; font-size: 1rem; }
+.mobile-brand-title { font-weight: 700; color: #fff; font-size: 0.95rem; }
 .mobile-menu-btn {
     background: transparent; border: none;
     color: var(--text-primary); font-size: 1.6rem; cursor: pointer;
