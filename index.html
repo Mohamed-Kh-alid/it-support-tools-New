@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharma Overseas - IT Service Desk</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- SheetJS Library for Parsing Excel Files Online -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h2>PHARMA OVERSEAS</h2>
+                <span>IT Service Desk</span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <button class="menu-item active" onclick="switchTab('workDistribution', this)">
+                    <span class="icon">⇄</span> Work Distribution
+                </button>
+                <button class="menu-item" onclick="switchTab('nightShift', this)">
+                    <span class="icon">⏱</span> Night Shift
+                </button>
+                <button class="menu-item" onclick="switchTab('annualVacations', this)">
+                    <span class="icon">📅</span> Annual Vacations
+                </button>
+            </nav>
+
+            <div class="sidebar-status-box">
+                <span class="status-dot"></span>
+                <span>System: Active</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area with Bottom Footer Wrapper -->
+        <div class="main-wrapper">
+            <main class="main-content">
+                <!-- Top Header Bar -->
+                <header class="content-header">
+                    <div class="header-title-area">
+                        <h1 id="pageTitle">Work Distribution</h1>
+                        <p id="pageSubtitle">Infrastructure Support & Group Branch Assignments</p>
+                    </div>
+                    <div class="header-search-area">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="globalSearch" placeholder="Search engineer, branch, or group..." onkeyup="filterTableData()">
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Top Summary Metric Cards -->
+                <section class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="metricGroupsCount">7 Groups (G1 to G7)</span>
+                            <span class="metric-label">Support Teams</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🏢</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="metricBranchesCount">117 Branches</span>
+                            <span class="metric-label">Total Covered</span>
+                        </div>
+                    </div>
+                    <div class="metric-card highlight-card">
+                        <div class="metric-icon">👤</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="metricNightShift">Loading...</span>
+                            <span class="metric-label">Night Shift</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dynamic Tab Content Container -->
+                <section class="content-section">
+                    <!-- Tab 1: Work Distribution Table -->
+                    <div id="tab-workDistribution" class="tab-content active">
+                        <div class="data-card">
+                            <div class="table-container">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 120px;">Group Name</th>
+                                            <th style="width: 300px;">Engineers</th>
+                                            <th>Assigned Branches (Click row for full list)</th>
+                                            <th style="width: 140px; text-align: right;">Total Branches</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="workDistributionTableBody">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Night Shift Table -->
+                    <div id="tab-nightShift" class="tab-content">
+                        <div class="data-card">
+                            <div class="table-container">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                              <th>Engineer Name</th>
+                                              <th>Start Date</th>
+                                              <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="nightShiftTableBody">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Annual Vacations Table -->
+                    <div id="tab-annualVacations" class="tab-content">
+                        <div class="data-card">
+                            <div class="table-container">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Engineer Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="annualVacationsTableBody">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Full Width Page Footer -->
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <p>Designed & Developed by <span class="developer-name">Mohamed Aboud</span></p>
+                    <span class="footer-company">Pharma Overseas © 2026</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Interactive Modal for Full Branches Display -->
+    <div id="branchModal" class="modal-overlay" onclick="closeBranchModal(event)">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modalGroupName">Group Details</h3>
+                    <span id="modalEngineersName" class="modal-subtext">Engineers: </span>
+                </div>
+                <button class="modal-close-btn" onclick="closeBranchModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-search-box">
+                    <input type="text" id="modalBranchSearch" placeholder="Search branch inside this group..." onkeyup="filterModalBranches()">
+                </div>
+                <div id="modalBranchesList" class="modal-tags-grid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span id="modalTotalCount" class="modal-count-badge">Total: 0 Branches</span>
+                <button class="modal-action-btn" onclick="closeBranchModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Logic Script -->
+    <script src="script.js"></script>
+</body>
+</html>
