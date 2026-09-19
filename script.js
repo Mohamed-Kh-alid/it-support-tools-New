@@ -52,11 +52,9 @@ function switchTab(tabId, element) {
     element.classList.add('active');
     activeTabName = tabId;
 
-    // مسح خانة البحث عند الانتقال بين التبابيب لضمان تجربة مستخدم أفضل
     const searchInput = document.getElementById('globalSearch');
     if (searchInput) {
         searchInput.value = '';
-        // إعادة عرض البيانات الأصلية للتبويب الجديد
         if (tabId === 'workDistribution') renderWorkDistributionTable(cachedWorkData);
         if (tabId === 'nightShift') renderNightShiftTable(cachedNightData);
         if (tabId === 'annualVacations') renderVacationsTable(cachedVacationsData);
@@ -106,7 +104,6 @@ function renderWorkDistributionTable(data) {
         tbody.appendChild(tr);
     });
 
-    // تحديث العدّادات في أعلى الصفحة فقط لو دي البيانات الأصلية الكاملة
     if (data === cachedWorkData) {
         document.getElementById('metricBranchesCount').innerText = `${totalBranchesSum} Branches`;
         document.getElementById('metricGroupsCount').innerText = `${data.length} Groups (G1 to G${data.length})`;
@@ -195,7 +192,6 @@ function filterModalBranches() {
     renderModalBranchTags(filtered);
 }
 
-// نظام بحث ذكي وشامل يعمل بكفاءة داخل التبويب النشط حالياً
 function filterTableData() {
     const query = document.getElementById('globalSearch').value.toLowerCase();
     
