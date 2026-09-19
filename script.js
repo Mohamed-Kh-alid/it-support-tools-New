@@ -187,10 +187,31 @@ function filterTableData() {
     
     if (activeTabName === 'workDistribution') {
         const filtered = cachedWorkData.filter(row => {
-            const text = `${row['Group Name']} ${row['Engineers']} ${row['Assigned Branches']}`.toLowerCase();
+            const text = `${row['Group Name'] || ''} ${row['Engineers'] || ''} ${row['Assigned Branches'] || ''}`.toLowerCase();
             return text.includes(query);
         });
         renderFilteredWorkTable(filtered);
+    } 
+    else if (activeTabName === 'nightShift') {
+        const filtered = cachedNightData.filter(row => {
+            const engName = row['Engineer Name'] || row['Infrastructure Support'] || '';
+            const startDate = formatExcelDate(row['Start Date']);
+            const endDate = formatExcelDate(row['End Date']);
+            const text = `${engName} ${startDate} ${endDate}`.toLowerCase();
+            return text.includes(query);
+        });
+        renderNightShiftTable(filtered);
+    } 
+    else if (activeTabName === 'annualVacations') {
+        const filtered = cachedVacationsData.filter(row => {
+            const engName = row['Engineer Name'] || row['Infrastructure Support'] || '';
+            const startDate = formatExcelDate(row['Start Date']);
+            const endDate = formatExcelDate(row['End Date']);
+            const status = row['Vacation Status'] || '';
+            const text = `${engName} ${startDate} ${endDate} ${status}`.toLowerCase();
+            return text.includes(query);
+        });
+        renderVacationsTable(filtered);
     }
 }
 
