@@ -460,7 +460,7 @@ html, body {
 }
 
 /* ==========================================================
-   Mobile Responsive Fix (إلغاء السايدبار الجانبي وتحويله لهيدر علوي متكامل)
+   Mobile Responsive Fix
    ========================================================== */
 @media (max-width: 1024px) {
     html, body {
@@ -473,7 +473,6 @@ html, body {
         width: 100% !important;
     }
 
-    /* تحويل السايدبار لشريط علوي أفقي شيك جداً للموبايل */
     .sidebar {
         width: 100% !important;
         height: auto !important;
@@ -541,7 +540,6 @@ html, body {
         padding: 16px;
     }
 
-    /* ضبط الجدول ليعمل بسكرول خفيف ومنتظم بدون تداخل أو لخبطة */
     .data-card {
         width: 100% !important;
     }
@@ -552,7 +550,7 @@ html, body {
     }
 
     .modern-table {
-        min-width: 500px !important; /* ضمان عدم انضغط الأعمدة بشكل سيء */
+        min-width: 500px !important;
     }
 
     .modern-table th, .modern-table td {
