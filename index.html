@@ -4,33 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pharma Overseas - IT Service Desk</title>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <!-- SheetJS Library for Parsing Excel Files Online -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+
     <div class="app-layout">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="appSidebar">
             <div class="sidebar-brand">
-                <h2>PHARMA OVERSEAS</h2>
-                <span>IT Service Desk</span>
+                 <div class="brand-text-area">
+                    <h2>PHARMA OVERSEAS</h2>
+                    <span>IT Service Desk</span>
+                </div>
+                <button id="mobileCloseBtn" class="mobile-close-btn" onclick="toggleMobileMenu()">&times;</button>
+            </div>
+
+            <!-- Live Time & Timezone Widget (Requested Style) -->
+            <div class="sidebar-time-widget">
+                <span id="liveClockTime">11:25</span> 
+                <span class="timezone-bracket">[ <span id="liveTimeZone">GMT +2</span> ]</span>
             </div>
 
             <nav class="sidebar-menu">
                 <button class="menu-item active" onclick="switchTab('workDistribution', this)">
-                    <span class="icon">⇄</span> <span class="menu-text">Work Distribution</span>
+                    <span>⇄</span> <span>Work Distribution</span>
                 </button>
                 <button class="menu-item" onclick="switchTab('nightShift', this)">
-                    <span class="icon">⏱</span> <span class="menu-text">Night Shift</span>
+                    <span>⏱</span> <span>Night Shift</span>
                 </button>
                 <button class="menu-item" onclick="switchTab('annualVacations', this)">
-                    <span class="icon">📅</span> <span class="menu-text">Annual Vacations</span>
+                    <span>📅</span> <span>Annual Vacations</span>
                 </button>
             </nav>
 
@@ -40,29 +47,30 @@
             </div>
         </aside>
 
-        <!-- Main Content Area with Bottom Footer Wrapper -->
         <div class="main-wrapper">
+            <!-- Top Mobile Bar -->
+            <header class="mobile-top-bar">
+                <div class="mobile-brand-title">IT Service Desk</div>
+                <button id="mobileMenuBtn" class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </header>
+
             <main class="main-content">
-                <!-- Top Header Bar -->
                 <header class="content-header">
                     <div class="header-title-area">
                         <h1 id="pageTitle">Work Distribution</h1>
-                        <p id="pageSubtitle">Infrastructure Support & Group Branch Assignments</p>
+                        <p id="pageSubtitle">Infrastructure Support & Branch Assignments</p>
                     </div>
-                    <div class="header-search-area">
-                        <div class="search-box">
-                            <span class="search-icon">🔍</span>
-                            <input type="text" id="globalSearch" placeholder="Search engineer, branch, or group..." onkeyup="filterTableData()">
-                        </div>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="globalSearch" placeholder="Search engineer..." onkeyup="filterTableData()">
                     </div>
                 </header>
 
-                <!-- Top Summary Metric Cards -->
                 <section class="metrics-row">
                     <div class="metric-card">
                         <div class="metric-icon">👥</div>
                         <div class="metric-info">
-                            <span class="metric-value" id="metricGroupsCount">7 Groups (G1 to G7)</span>
+                            <span class="metric-value" id="metricGroupsCount">7 Teams</span>
                             <span class="metric-label">Support Teams</span>
                         </div>
                     </div>
@@ -77,57 +85,69 @@
                         <div class="metric-icon">👤</div>
                         <div class="metric-info">
                             <span class="metric-value" id="metricNightShift">Loading...</span>
-                            <span class="metric-label">Night Shift</span>
+                            <span class="metric-label">Night Shift (Today)</span>
                         </div>
                     </div>
                 </section>
 
-                <!-- Dynamic Tab Content Container -->
                 <section class="content-section">
-                    <!-- Tab 1: Work Distribution Table -->
+                    <!-- Tab 1: Work Distribution -->
                     <div id="tab-workDistribution" class="tab-content active">
                         <div class="data-card">
                             <div class="table-container">
                                 <table class="modern-table">
                                     <thead>
                                         <tr>
-                                            <th>Group Name</th>
                                             <th>Engineers</th>
                                             <th>Assigned Branches</th>
                                             <th style="text-align: right;">Total Branches</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="workDistributionTableBody">
-                                        <!-- Populated dynamically -->
-                                    </tbody>
+                                    <tbody id="workDistributionTableBody"></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tab 2: Night Shift Table -->
+                    <!-- Tab 2: Night Shift -->
                     <div id="tab-nightShift" class="tab-content">
                         <div class="data-card">
+                            <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <h3 style="font-size: 1rem; color: #FFFFFF; display: flex; align-items: center; gap: 10px;">📅 Rotation Schedule Table</h3>
+                                <span id="rotationCountBadge" style="background: rgba(59, 130, 246, 0.15); color: #60A5FA; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;">0 Rotations</span>
+                            </div>
                             <div class="table-container">
                                 <table class="modern-table">
                                     <thead>
                                         <tr>
+                                            <th style="width: 80px;">Engineer</th>
                                             <th>Engineer Name</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
+                                            <th style="text-align: right;">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="nightShiftTableBody">
-                                        <!-- Populated dynamically -->
-                                    </tbody>
+                                    <tbody id="nightShiftTableBody"></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tab 3: Annual Vacations Table -->
+                    <!-- Tab 3: Annual Vacations -->
                     <div id="tab-annualVacations" class="tab-content">
-                        <div class="data-card">
+                        <div id="vacationsLoginBox" style="display: flex; justify-content: center; padding: 40px 20px;">
+                            <div style="background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 35px; border-radius: 14px; width: 100%; max-width: 400px; text-align: center;">
+                                <h3 style="color: #FFFFFF; margin-bottom: 8px;">🔒 Restricted Page</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">Please enter credentials to view Annual Vacations.</p>
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <input type="text" id="vacationUsername" placeholder="Username..." style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-app); color: #fff; outline:none;">
+                                    <input type="password" id="vacationPassword" placeholder="Password..." style="padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-app); color: #fff; outline:none;">
+                                    <button onclick="checkVacationsLogin()" style="padding: 12px; border-radius: 8px; border: none; background: var(--accent-blue); color: #fff; font-weight: 650; cursor:pointer;">Unlock Page</button>
+                                    <p id="vacationErrorMsg" style="color: var(--error-color); font-size: 0.8rem;"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="vacationsTableContainer" class="data-card" style="display: none;">
                             <div class="table-container">
                                 <table class="modern-table">
                                     <thead>
@@ -138,9 +158,7 @@
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="annualVacationsTableBody">
-                                        <!-- Populated dynamically -->
-                                    </tbody>
+                                    <tbody id="annualVacationsTableBody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -148,42 +166,91 @@
                 </section>
             </main>
 
-            <!-- Full Width Page Footer -->
             <footer class="site-footer">
                 <div class="footer-content">
-                    <p>Designed & Developed by <span class="developer-name">Mohamed Aboud</span></p>
+                    <p>Designed & Developed by <span class="developer-name">Mohamed Aboud </span></p>
                     <span class="footer-company">Pharma Overseas © 2026</span>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- Interactive Modal for Full Branches Display -->
-    <div id="branchModal" class="modal-overlay" onclick="closeBranchModal(event)">
-        <div class="modal-container" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div>
-                    <h3 id="modalGroupName">Group Details</h3>
-                    <span id="modalEngineersName" class="modal-subtext">Engineers: </span>
-                </div>
-                <button class="modal-close-btn" onclick="closeBranchModal()">&times;</button>
+    <!-- Branch Modal -->
+    <div id="branchModal" class="drawer-overlay" onclick="closeBranchModal(event)">
+        <div class="drawer-container modal-box" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3 id="modalGroupName">Assigned Branches</h3>
+                <button class="drawer-close" onclick="closeBranchModal()">&times;</button>
             </div>
-            <div class="modal-body">
-                <div class="modal-search-box">
-                    <input type="text" id="modalBranchSearch" placeholder="Search branch inside this group..." onkeyup="filterModalBranches()">
-                </div>
-                <div id="modalBranchesList" class="modal-tags-grid">
-                    <!-- Populated dynamically via JS -->
-                </div>
+            <div style="margin-bottom: 15px;"><span id="modalEngineersName" style="color: var(--accent-blue); font-size: 0.85rem;">Engineers: </span></div>
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="modalBranchSearch" placeholder="Search branch..." onkeyup="filterModalBranches()" style="width: 100%; background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; color: #fff; outline: none;">
             </div>
-            <div class="modal-footer">
-                <span id="modalTotalCount" class="modal-count-badge">Total: 0 Branches</span>
-                <button class="modal-action-btn" onclick="closeBranchModal()">Close</button>
+            <div id="modalBranchesList" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 350px; overflow-y: auto;"></div>
+            <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 15px;">
+                <span id="modalTotalCount" style="font-size: 0.8rem; color: var(--text-secondary);">Total: 0 Branches</span>
+                <button onclick="closeBranchModal()" style="background: var(--accent-blue); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- Main Logic Script -->
+    <!-- Slide-over Drawer for Employee ID & Shift Profile -->
+    <div id="employeeDrawer" class="drawer-overlay" onclick="closeEmployeeDrawer(event)">
+        <div class="drawer-container" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3>🟢 EMPLOYEE ID PROFILE</h3>
+                <button class="drawer-close" onclick="closeEmployeeDrawer()">&times;</button>
+            </div>
+
+            <!-- Profile Card Box -->
+            <div class="profile-card-box">
+                <div id="drawerEmpIdBadge" class="profile-id-tag">#PO-2026</div>
+                <h2 id="drawerEmpName" class="profile-name">Yousef Ibrahim</h2>
+                <p id="drawerEmpTitle" class="profile-title">IT Technical Support Specialist</p>
+            </div>
+
+            <!-- Corporate Information -->
+            <div class="info-section-title">Corporate Information</div>
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">✉️ Email:</span>
+                    <span id="drawerEmpEmail" class="info-value" style="font-size: 0.82rem; color: #60A5FA;">user@pharmaoverseas.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📞 Phone:</span>
+                    <span id="drawerEmpPhone" class="info-value" style="color: #34D399;">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🆔 ID:</span>
+                    <span id="drawerEmpIdVal" class="info-value">PO-2026-01</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🏢 Dept:</span>
+                    <span id="drawerEmpDept" class="info-value">Information Technology</span>
+                </div>
+            </div>
+
+            <!-- Night Shift Rotation Period -->
+            <div class="info-section-title">Night Shift Rotation Period</div>
+            <div class="info-box">
+                <div class="shift-dates-grid">
+                    <div class="shift-date-box">
+                        <div class="shift-date-label">Start Date</div>
+                        <div id="drawerStartDate" class="shift-date-val">04/09/2026</div>
+                    </div>
+                    <div class="shift-date-box">
+                        <div class="shift-date-label">End Date</div>
+                        <div id="drawerEndDate" class="shift-date-val" style="color: var(--success-text);">10/09/2026</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 20px; text-align: center;">
+                <button onclick="closeEmployeeDrawer()" style="width: 100%; background: var(--accent-blue); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">Done</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
