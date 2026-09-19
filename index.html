@@ -24,13 +24,13 @@
 
             <nav class="sidebar-menu">
                 <button class="menu-item active" onclick="switchTab('workDistribution', this)">
-                    <span class="icon">⇄</span> Work Distribution
+                    <span class="icon">⇄</span> <span class="menu-text">Work Distribution</span>
                 </button>
                 <button class="menu-item" onclick="switchTab('nightShift', this)">
-                    <span class="icon">⏱</span> Night Shift
+                    <span class="icon">⏱</span> <span class="menu-text">Night Shift</span>
                 </button>
                 <button class="menu-item" onclick="switchTab('annualVacations', this)">
-                    <span class="icon">📅</span> Annual Vacations
+                    <span class="icon">📅</span> <span class="menu-text">Annual Vacations</span>
                 </button>
             </nav>
 
@@ -91,10 +91,10 @@
                                 <table class="modern-table">
                                     <thead>
                                         <tr>
-                                            <th style="width: 120px;">Group Name</th>
-                                            <th style="width: 300px;">Engineers</th>
-                                            <th>Assigned Branches (Click row for full list)</th>
-                                            <th style="width: 140px; text-align: right;">Total Branches</th>
+                                            <th>Group Name</th>
+                                            <th>Engineers</th>
+                                            <th>Assigned Branches</th>
+                                            <th style="text-align: right;">Total Branches</th>
                                         </tr>
                                     </thead>
                                     <tbody id="workDistributionTableBody">
@@ -112,9 +112,9 @@
                                 <table class="modern-table">
                                     <thead>
                                         <tr>
-                                              <th>Engineer Name</th>
-                                              <th>Start Date</th>
-                                              <th>End Date</th>
+                                            <th>Engineer Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                         </tr>
                                     </thead>
                                     <tbody id="nightShiftTableBody">
